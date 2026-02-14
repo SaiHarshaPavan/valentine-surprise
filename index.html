@@ -110,7 +110,7 @@ canvas {
 
 <body>
 
-<!-- ⚠️ IMPORTANT: Make sure this name matches your file exactly -->
+<!-- Background Video -->
 <video autoplay muted loop playsinline id="bgVideo">
     <source src="background.mp4" type="video/mp4">
 </video>
@@ -133,7 +133,6 @@ canvas {
 <div id="lovePage" class="centered">
 
     <div class="loveText">She said Yes ❤️✨</div>
-
     <div class="loveText">I love you so much bujji ❤️</div>
     <div class="loveText">Thanks for coming into my life 💖</div>
     <div class="loveText">Lets have a wonderful journey together ✨</div>
@@ -151,12 +150,25 @@ const noBtn = document.getElementById("noBtn");
 const mainPage = document.getElementById("mainPage");
 const lovePage = document.getElementById("lovePage");
 const music = document.getElementById("bgMusic");
+const bgVideo = document.getElementById("bgVideo");
+
+/* 🔥 FORCE DESKTOP VIDEO AUTOPLAY FIX */
+document.addEventListener("DOMContentLoaded", function () {
+    bgVideo.muted = true;
+    bgVideo.play().catch(err => {
+        console.log("Video autoplay blocked:", err);
+    });
+});
 
 /* YES CLICK */
 yesBtn.onclick = function() {
     mainPage.style.display = "none";
     lovePage.style.display = "flex";
-    music.play();
+
+    music.play().catch(err => {
+        console.log("Music autoplay blocked:", err);
+    });
+
     startHearts();
     startFireworks();
 };
@@ -182,12 +194,16 @@ function startHearts() {
     }, 400);
 }
 
-/* CONTINUOUS FIREWORKS */
+/* FIREWORKS */
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
 
 let particles = [];
 let fireworksInterval = null;
